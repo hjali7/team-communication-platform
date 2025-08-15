@@ -12,6 +12,9 @@ services:
     environment:
       - FLASK_ENV=development
       - FLASK_DEBUG=1
+      - POSTGRES_USER=team_user
+      - POSTGRES_PASSWORD=team_password123
+      - POSTGRES_DB=team_communication
     depends_on:
       - db
     restart: unless-stopped
