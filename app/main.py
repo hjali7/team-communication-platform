@@ -19,6 +19,20 @@ class Message(db.Model):
             'text': self.text
         }
 
+class Task(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    title = db.Column(db.String(120), nullable=False)
+    description = db.Column(db.Text, nullable=True)
+    is_completed = db.Column(db.Boolean, default=False)
+
+    def to_json(self):
+        return {
+            'id': self.id,
+            'title': self.title,
+            'description': self.description,
+            'is_completed': self.is_completed
+        }
+
 # --- Application Factory ---
 def create_app(testing=False):
     app = Flask(__name__)
@@ -60,5 +74,31 @@ def create_app(testing=False):
     def get_messages():
         messages = Message.query.all()
         return jsonify([message.to_json() for message in messages])
+
+    @app.route('/tasks', methods=['GET'])
+    def get_tasks():
+        tasks = Task.query.all()
+        return jsonify([task.to_json() for task in tasks])
+
+    @app.route('/tasks', methods=['POST'])
+    def add_task():
+        data = request.get_json()
+        if not data or not 'title' in data:
+            return jsonify({'error': 'Title is required'}), 400
+        
+        new_task = Task(
+            title=data['title'],
+            description=data.get('description', '')
+        )
+        db.session.add(new_task)
+        db.session.commit()
+        return jsonify(new_task.to_json()), 201
+
+    @app.route('/tasks/<int:task_id>', methods=['PUT'])
+    def update_task(task_id):
+        task = Task.query.get_or_404(task_id)
+        task.is_completed = True
+        db.session.commit()
+        return jsonify(task.to_json())
 
     return app
