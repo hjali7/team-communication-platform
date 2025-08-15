@@ -1,16 +1,35 @@
-name: CI Pipeline
+name: CI/CD Pipeline
 
 on:
   push:
     branches: [ "main" ]
 
+env:
+  IMAGE_NAME: ghcr.io/hjali7/team-communication-platform
+
 jobs:
-  build:
+  build_and_push:
     runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      packages: write
 
     steps:
       - name: Checkout repository
         uses: actions/checkout@v3
 
-      - name: Build Docker image
-        run: docker build -t team-comm-app:latest .
+      - name: Log in to the GitHub Container Registry
+        uses: docker/login-action@v2
+        with:
+          registry: ghcr.io
+          # نام کاربری، یوزرنیم گیت‌هاب شماست
+          username: ${{ github.actor }}
+          # پسورد، توکنی است که به صورت سکرت ذخیره کردیم
+          password: ${{ secrets.GH_PAT }}
+
+      - name: Build and push Docker image
+        uses: docker/build-push-action@v4
+        with:
+          context: .
+          push: true
+          tags: ${{ env.IMAGE_NAME }}:latest

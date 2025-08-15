@@ -1,0 +1,19 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: team-comm-app-deployment
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: team-comm-app
+  template:
+    metadata:
+      labels:
+        app: team-comm-app
+    spec:
+      containers:
+        - name: team-comm-app-container
+          image: ghcr.io/hjali7/team-communication-platform
+          ports:
+            - containerPort: 5000
