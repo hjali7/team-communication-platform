@@ -1,6 +1,7 @@
 import os
 from flask import Flask, request, jsonify
 from flask_sqlalchemy import SQLAlchemy
+from prometheus_flask_exporter import PrometheusMetrics
 
 # آبجکت db را اینجا بدون اتصال به app تعریف می‌کنیم
 db = SQLAlchemy()
@@ -36,6 +37,11 @@ class Task(db.Model):
 # --- Application Factory ---
 def create_app(testing=False):
     app = Flask(__name__)
+    
+    # --- این بخش اضافه شود ---
+    if not testing:
+        PrometheusMetrics(app)
+    # -------------------------
 
     # --- Database Configuration ---
     if testing:
