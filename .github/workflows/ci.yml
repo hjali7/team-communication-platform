@@ -28,7 +28,6 @@ jobs:
         run: python -m pytest tests/
 
   build_and_push:
-    # این جاب حالا به جاب تست وابسته است
     needs: test
     runs-on: ubuntu-latest
     permissions:

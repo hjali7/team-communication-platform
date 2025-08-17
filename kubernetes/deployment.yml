@@ -18,19 +18,22 @@ spec:
           imagePullPolicy: IfNotPresent
           ports:
             - containerPort: 5000
+          resources:
+            requests:
+              memory: "128Mi"
+              cpu: "100m"
+            limits:
+              memory: "256Mi"
+              cpu: "200m"
           env:
             - name: DB_HOST
               value: "prometheus-postgresql"
             - name: POSTGRES_USER
-              # این مقدار را مستقیم وارد می‌کنیم چون در helm install آن را 'user' تنظیم کردیم
               value: "user"
             - name: POSTGRES_DB
-              # این مقدار را مستقیم وارد می‌کنیم چون در helm install آن را 'db' تنظیم کردیم
               value: "db"
             - name: POSTGRES_PASSWORD
               valueFrom:
                 secretKeyRef:
-                  # نام سکرت درست است
                   name: prometheus-postgresql
-                  # کلید صحیح برای پسورد در چارت Bitnami این است
                   key: postgres-password
