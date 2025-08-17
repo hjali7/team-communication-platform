@@ -1,0 +1,15 @@
+apiVersion: monitoring.coreos.com/v1
+kind: ServiceMonitor
+metadata:
+  name: team-comm-app-servicemonitor
+  # این لیبل مهم است تا Prometheus Operator این مانیفست را پیدا کند
+  labels:
+    release: prometheus
+spec:
+  selector:
+    matchLabels:
+      app: team-comm-app
+  endpoints:
+    - port: http
+      path: /metrics
+      interval: 15s

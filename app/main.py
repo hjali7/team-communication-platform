@@ -53,7 +53,7 @@ def create_app(testing=False):
         db_user = os.getenv("POSTGRES_USER", "user")
         db_password = os.getenv("POSTGRES_PASSWORD", "password")
         db_name = os.getenv("POSTGRES_DB", "db")
-        db_host = "db"
+        db_host = os.getenv("DB_HOST", "db")
         app.config['SQLALCHEMY_DATABASE_URI'] = f'postgresql://{db_user}:{db_password}@{db_host}:5432/{db_name}'
 
     app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False

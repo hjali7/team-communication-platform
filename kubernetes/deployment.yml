@@ -14,6 +14,25 @@ spec:
     spec:
       containers:
         - name: team-comm-app-container
-          image: ghcr.io/hjali7/team-communication-platform
+          image: ghcr.io/hjali7/team-communication-platform:latest
+          imagePullPolicy: IfNotPresent
           ports:
             - containerPort: 5000
+          env:
+            - name: DB_HOST
+              value: "prometheus-postgresql"
+            - name: POSTGRES_USER
+              valueFrom:
+                secretKeyRef:
+                  name: prometheus-postgresql
+                  key: postgres-username
+            - name: POSTGRES_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: prometheus-postgresql
+                  key: postgres-password
+            - name: POSTGRES_DB
+              valueFrom:
+                secretKeyRef:
+                  name: prometheus-postgresql
+                  key: postgres-database
