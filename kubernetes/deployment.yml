@@ -14,7 +14,7 @@ spec:
     spec:
       containers:
         - name: team-comm-app-container
-          image: ghcr.io/hjali7/team-communication-platform:latest
+          image: ghcr.io/hjali7/team-communication-platform:5eae72f
           imagePullPolicy: IfNotPresent
           ports:
             - containerPort: 5000

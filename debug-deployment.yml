@@ -1,0 +1,38 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  # یک نام جدید برای دپلوییمنت دیباگ
+  name: team-comm-app-debug
+spec:
+  replicas: 1 # فقط یک نسخه برای دیباگ کافی است
+  selector:
+    matchLabels:
+      app: team-comm-app-debug
+  template:
+    metadata:
+      labels:
+        app: team-comm-app-debug
+    spec:
+      containers:
+        - name: team-comm-app-container
+          # مهم: از همان ایمیج با تگ مشخص استفاده کن
+          image: ghcr.io/hjali7/team-communication-platform:5eae72f # <--- تگ ایمیج خود را اینجا قرار بده
+          imagePullPolicy: IfNotPresent
+          
+          # === این بخش کلیدی اضافه شده است ===
+          # این دستور، اجرای gunicorn را لغو کرده و کانتینر را برای همیشه زنده نگه می‌دارد
+          command: ["/bin/sh", "-c", "sleep infinity"]
+          # ==================================
+
+          env:
+            - name: DB_HOST
+              value: "prometheus-postgresql"
+            - name: POSTGRES_USER
+              value: "user"
+            - name: POSTGRES_DB
+              value: "db"
+            - name: POSTGRES_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: prometheus-postgresql
+                  key: postgres-password

@@ -36,14 +36,11 @@ class Task(db.Model):
 def create_app(testing=False):
     app = Flask(__name__)
     
-    # --- این بخش اضافه شود ---
     if not testing:
         PrometheusMetrics(app)
-    # -------------------------
 
     # --- Database Configuration ---
     if testing:
-        # در حالت تست، از دیتابیس SQLite در حافظه استفاده می‌کنیم
         app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///:memory:'
         app.config['TESTING'] = True
     else:
@@ -55,7 +52,6 @@ def create_app(testing=False):
 
     app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 
-    # آبجکت db را به اپلیکیشن متصل می‌کنیم
     db.init_app(app)
 
     # --- API Endpoints ---
