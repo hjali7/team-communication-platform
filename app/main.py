@@ -3,11 +3,9 @@ from flask import Flask, request, jsonify
 from flask_sqlalchemy import SQLAlchemy
 from prometheus_flask_exporter import PrometheusMetrics
 
-# آبجکت db را اینجا بدون اتصال به app تعریف می‌کنیم
 db = SQLAlchemy()
 
 # --- Database Models ---
-# مدل‌ها تغییری نکرده‌اند
 class Message(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     username = db.Column(db.String(80), nullable=False)
@@ -49,7 +47,6 @@ def create_app(testing=False):
         app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///:memory:'
         app.config['TESTING'] = True
     else:
-        # در حالت عادی، از دیتابیس PostgreSQL استفاده می‌کنیم
         db_user = os.getenv("POSTGRES_USER", "user")
         db_password = os.getenv("POSTGRES_PASSWORD", "password")
         db_name = os.getenv("POSTGRES_DB", "db")
